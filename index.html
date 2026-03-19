@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vikramakshit | Arcturus // Spider-Verse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        :root {
+            --miles-black: #0a0a0a;
+            --miles-red: #e23636;
+            --miles-dark-red: #8b0000;
+            --miles-bright-red: #ff4444;
+            --comic-yellow: #ffd700;
+            --comic-white: #f0f0f0;
+            --comic-gray: #888888;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            background: var(--miles-black);
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--miles-black);
+            color: var(--comic-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* DYNAMIC COMIC BACKGROUND */
+        .comic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(226, 54, 54, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 68, 68, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+            animation: bgPulse 6s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* BOLD HALFTONE */
+        .halftone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at center, var(--miles-red) 2px, transparent 2px);
+            background-size: 10px 10px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+            animation: halftoneMove 15s linear infinite;
+        }
+        
+        @keyframes halftoneMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+        
+        /* COMIC BURST RAYS */
+        .burst-rays {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200vmax;
+            height: 200vmax;
+            transform: translate(-50%, -50%);
+            background: repeating-conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                transparent 6deg,
+                rgba(226, 54, 54, 0.05) 6deg,
+                rgba(226, 54, 54, 0.05) 8deg
+            );
+            animation: burstRotate 50s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes burstRotate {
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* FLOATING MILES IMAGES */
+        .miles-float {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(0 0 20px rgba(226, 54, 54, 0.6));
+            animation: floatMiles 8s ease-in-out infinite;
+        }
+        
+        .miles-1 {
+            bottom: 5%;
+            right: 2%;
+            width: 260px;
+            opacity: 0.95;
+            animation-delay: 0s;
+            z-index: 5;
+        }
+        
+        .miles-2 {
+            top: 15%;
+            left: 2%;
+            width: 220px;
+            opacity: 0.85;
+            animation-delay: -4s;
+            z-index: 5;
+        }
+        
+        .miles-3 {
+            bottom: 25%;
+            left: 3%;
+            width: 180px;
+            opacity: 0.75;
+            animation-delay: -2s;
+            z-index: 4;
+        }
+        
+        @keyframes floatMiles {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-40px) rotate(2deg); }
+        }
+        
+        /* MOVING SPIDERS */
+        .spider-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+        
+        .spider {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.7;
+            animation: spiderCrawl var(--duration) linear infinite;
+            filter: drop-shadow(0 0 8px var(--miles-red));
+        }
+        
+        @keyframes spiderCrawl {
+            0% {
+                transform: translate(var(--start-x), var(--start-y)) rotate(0deg);
+            }
+            25% {
+                transform: translate(calc(var(--start-x) + 80px), calc(var(--start-y) + 40px)) rotate(90deg);
+            }
+            50% {
+                transform: translate(calc(var(--start-x) + 160px), calc(var(--start-y) - 20px)) rotate(180deg);
+            }
+            75% {
+                transform: translate(calc(var(--start-x) + 240px), calc(var(--start-y) + 60px)) rotate(270deg);
+            }
+            100% {
+                transform: translate(calc(var(--start-x) + 320px), var(--start-y)) rotate(360deg);
+            }
+        }
+        
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            animation: glitch-skew 3s infinite;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+            color: var(--comic-yellow);
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+            color: var(--miles-red);
+            z-index: -2;
+        }
+        
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(20% 0 80% 0); transform: translate(-3px, -3px); }
+            20% { clip-path: inset(60% 0 10% 0); transform: translate(3px, 3px); }
+            40% { clip-path: inset(40% 0 50% 0); transform: translate(-3px, 3px); }
+            60% { clip-path: inset(80% 0 5% 0); transform: translate(3px, -3px); }
+            80% { clip-path: inset(10% 0 70% 0); transform: translate(-3px, 3px); }
+            100% { clip-path: inset(30% 0 50% 0); transform: translate(3px, -3px); }
+        }
+        
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(15% 0 85% 0); transform: translate(3px, 3px); }
+            20% { clip-path: inset(65% 0 25% 0); transform: translate(-3px, -3px); }
+            40% { clip-path: inset(45% 0 45% 0); transform: translate(3px, -3px); }
+            60% { clip-path: inset(85% 0 10% 0); transform: translate(-3px, 3px); }
+            80% { clip-path: inset(5% 0 75% 0); transform: translate(3px, 3px); }
+            100% { clip-path: inset(35% 0 55% 0); transform: translate(-3px, 3px); }
+        }
+        
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(-2deg); }
+            20% { transform: skew(2deg); }
+            30% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 4px solid var(--miles-red);
+            box-shadow: 0 4px 20px rgba(226, 54, 54, 0.4);
+        }
+        
+        .logo {
+            font-family: 'Bangers', cursive;
+            font-size: 2.5rem;
+            color: var(--miles-red);
+            text-shadow: 
+                3px 3px 0 var(--comic-yellow),
+                6px 6px 0 rgba(0,0,0,0.5);
+            letter-spacing: 3px;
+            transform: rotate(-3deg);
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes logoPulse {
+            0%, 100% { text-shadow: 3px 3px 0 var(--comic-yellow), 6px 6px 0 rgba(0,0,0,0.5); }
+            50% { text-shadow: 3px 3px 0 var(--comic-yellow), 6px 6px 0 rgba(226, 54, 54, 0.8); }
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--comic-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(226, 54, 54, 0.1);
+            font-weight: bold;
+        }
+        
+        .nav-links a:hover {
+            color: var(--miles-black);
+            border-color: var(--miles-red);
+            background: var(--comic-yellow);
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 4px 4px 0 var(--miles-red);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            z-index: 10;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+            position: relative;
+        }
+        
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--miles-black);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            animation: flicker 3s infinite;
+            background: var(--comic-yellow);
+            padding: 0.6rem 1.2rem;
+            transform: rotate(-2deg);
+            border: 3px solid var(--miles-red);
+            box-shadow: 4px 4px 0 var(--miles-red);
+            font-weight: bold;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+            52% { opacity: 0.3; }
+            54% { opacity: 1; }
+        }
+        
+        .hero h1 {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(4rem, 12vw, 8rem);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: var(--comic-white);
+            text-shadow: 
+                4px 4px 0 var(--miles-red),
+                8px 8px 0 var(--miles-dark-red),
+                12px 12px 0 rgba(0,0,0,0.5);
+            transform: rotate(-3deg);
+            letter-spacing: 6px;
+            animation: titleShake 4s ease-in-out infinite;
+        }
+        
+        @keyframes titleShake {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(-2deg); }
+        }
+        
+        .hero-handle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            color: var(--miles-red);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(226, 54, 54, 0.8);
+            background: var(--miles-black);
+            padding: 0.6rem 1.2rem;
+            display: inline-block;
+            transform: rotate(2deg);
+            border: 3px solid var(--miles-red);
+            box-shadow: 0 0 20px rgba(226, 54, 54, 0.3);
+            font-weight: bold;
+        }
+        
+        .hero-bio {
+            font-size: 1.25rem;
+            color: var(--comic-gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+            background: rgba(10, 10, 10, 0.9);
+            padding: 1.5rem;
+            border-left: 5px solid var(--miles-red);
+            border-right: 5px solid var(--comic-yellow);
+            transform: rotate(-1deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .meta-badge {
+            padding: 0.7rem 1.3rem;
+            background: var(--miles-red);
+            color: var(--comic-white);
+            transform: rotate(var(--rot));
+            border: 3px solid var(--comic-white);
+            box-shadow: 4px 4px 0 var(--comic-yellow);
+            font-weight: bold;
+        }
+        
+        .meta-badge:nth-child(1) { --rot: -3deg; }
+        .meta-badge:nth-child(2) { --rot: 2deg; }
+        .meta-badge:nth-child(3) { --rot: -2deg; }
+        .meta-badge:nth-child(4) { --rot: 3deg; }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2.5rem;
+            background: var(--miles-red);
+            color: var(--comic-white);
+            text-decoration: none;
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            border: 4px solid var(--comic-white);
+            transform: rotate(-2deg);
+            transition: all 0.3s;
+            box-shadow: 
+                6px 6px 0 var(--comic-yellow),
+                0 0 30px rgba(226, 54, 54, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-cta:hover {
+            transform: rotate(2deg) scale(1.05);
+            box-shadow: 
+                8px 8px 0 var(--miles-red),
+                0 0 40px rgba(255, 215, 0, 0.6);
+            background: var(--comic-yellow);
+            color: var(--miles-black);
+        }
+        
+        /* PROFILE CONTAINER - TUMHARI COMIC PHOTO */
+        .profile-container {
+            position: relative;
+            margin: 2rem auto;
+            width: 320px;
+            height: 320px;
+        }
+        
+        .profile-box {
+            width: 100%;
+            height: 100%;
+            border: 5px solid var(--comic-white);
+            background: var(--miles-black);
+            position: relative;
+            transform: rotate(-3deg);
+            box-shadow: 
+                10px 10px 0 var(--miles-red),
+                20px 20px 0 rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        /* Comic Panels */
+        .panel-section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .section-title {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--miles-red);
+            text-shadow: 
+                3px 3px 0 var(--comic-yellow),
+                6px 6px 0 var(--miles-dark-red);
+            transform: rotate(-2deg);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            padding: 0.5rem 2rem;
+            background: var(--miles-black);
+            border: 5px solid var(--miles-red);
+            box-shadow: 
+                8px 8px 0 var(--comic-yellow),
+                0 0 40px rgba(226, 54, 54, 0.3);
+        }
+        
+        .comic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .comic-card {
+            background: var(--miles-black);
+            border: 4px solid var(--comic-white);
+            padding: 2rem;
+            position: relative;
+            transform: rotate(var(--rotation));
+            transition: all 0.3s;
+            box-shadow: 
+                8px 8px 0 var(--miles-red),
+                0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .comic-card:nth-child(1) { --rotation: -3deg; }
+        .comic-card:nth-child(2) { --rotation: 2deg; }
+        .comic-card:nth-child(3) { --rotation: -2deg; }
+        
+        .comic-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+            box-shadow: 
+                12px 12px 0 var(--comic-yellow),
+                0 0 30px rgba(226, 54, 54, 0.4);
+            border-color: var(--comic-yellow);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 4px dashed var(--miles-red);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 5px var(--miles-red));
+        }
+        
+        .card-issue {
+            font-family: 'Bangers', cursive;
+            font-size: 1.1rem;
+            color: var(--miles-black);
+            background: var(--comic-yellow);
+            padding: 0.4rem 1rem;
+            transform: rotate(3deg);
+            border: 3px solid var(--miles-black);
+            box-shadow: 2px 2px 0 var(--miles-red);
+        }
+        
+        .card-title {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--comic-white);
+            text-shadow: 
+                3px 3px 0 var(--miles-red),
+                6px 6px 0 rgba(0,0,0,0.5);
+        }
+        
+        .card-content {
+            font-size: 1rem;
+            color: var(--comic-gray);
+            line-height: 1.8;
+        }
+        
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            background: var(--miles-red);
+            color: var(--comic-white);
+            border: 2px solid var(--comic-white);
+            transform: rotate(-1deg);
+            box-shadow: 3px 3px 0 var(--comic-yellow);
+            font-weight: bold;
+        }
+        
+        /* Interests Section */
+        .interests-section {
+            background: repeating-linear-gradient(
+                45deg,
+                var(--miles-black),
+                var(--miles-black) 20px,
+                rgba(226, 54, 54, 0.08) 20px,
+                rgba(226, 54, 54, 0.08) 40px
+            );
+            position: relative;
+        }
+        
+        .interests-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--miles-red),
+                var(--miles-red) 20px,
+                var(--comic-yellow) 20px,
+                var(--comic-yellow) 40px
+            );
+        }
+        
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .interest-item {
+            background: var(--miles-black);
+            border: 4px solid var(--comic-white);
+            padding: 1.5rem;
+            text-align: center;
+            transform: rotate(var(--tilt));
+            transition: all 0.3s;
+            box-shadow: 
+                6px 6px 0 var(--miles-red),
+                0 0 15px rgba(0,0,0,0.3);
+        }
+        
+        .interest-item:nth-child(1) { --tilt: -3deg; }
+        .interest-item:nth-child(2) { --tilt: 2deg; }
+        .interest-item:nth-child(3) { --tilt: -2deg; }
+        .interest-item:nth-child(4) { --tilt: 3deg; }
+        .interest-item:nth-child(5) { --tilt: -2deg; }
+        .interest-item:nth-child(6) { --tilt: 3deg; }
+        
+        .interest-item:hover {
+            transform: rotate(0deg) scale(1.15);
+            border-color: var(--comic-yellow);
+            box-shadow: 
+                10px 10px 0 var(--comic-yellow),
+                0 0 25px rgba(226, 54, 54, 0.4);
+            z-index: 10;
+            background: var(--miles-dark-red);
+        }
+        
+        .interest-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 0 8px var(--miles-red));
+        }
+        
+        .interest-label {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--comic-yellow);
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 var(--miles-red);
+        }
+        
+        /* Gaming Section */
+        .gaming-section {
+            background: var(--miles-dark-red);
+            position: relative;
+        }
+        
+        .gaming-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--comic-yellow),
+                var(--comic-yellow) 30px,
+                var(--miles-black) 30px,
+                var(--miles-black) 60px
+            );
+        }
+        
+        .gaming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .game-card {
+            background: var(--miles-black);
+            border: 4px solid var(--comic-white);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            transform: rotate(var(--tilt));
+            box-shadow: 
+                6px 6px 0 var(--comic-yellow),
+                0 0 15px rgba(0,0,0,0.4);
+        }
+        
+        .game-card:nth-child(odd) { --tilt: -2deg; }
+        .game-card:nth-child(even) { --tilt: 2deg; }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .game-card:hover::before {
+            left: 100%;
+        }
+        
+        .game-card:hover {
+            transform: rotate(0deg) scale(1.1);
+            border-color: var(--comic-yellow);
+            box-shadow: 
+                10px 10px 0 var(--miles-red),
+                0 0 25px rgba(255, 215, 0, 0.3);
+        }
+        
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 0 5px var(--comic-yellow));
+        }
+        
+        .game-name {
+            font-family: 'Bangers', cursive;
+            font-size: 1.3rem;
+            color: var(--comic-yellow);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 var(--miles-red);
+        }
+        
+        .game-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--comic-white);
+            background: var(--miles-red);
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--comic-white);
+            display: inline-block;
+            transform: rotate(-1deg);
+            font-weight: bold;
+        }
+        
+        /* Quote Section with Miles Upside Down */
+        .quote-section {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: var(--miles-red);
+            position: relative;
+            border-top: 5px solid var(--comic-yellow);
+            border-bottom: 5px solid var(--comic-yellow);
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .quote-section::before {
+            content: '❝';
+            position: absolute;
+            top: -3rem;
+            left: 2rem;
+            font-size: 15rem;
+            color: rgba(0, 0, 0, 0.2);
+            font-family: serif;
+        }
+        
+        .quote-miles {
+            position: absolute;
+            top: 10%;
+            right: 5%;
+            width: 200px;
+            opacity: 0.9;
+            transform: scaleX(-1) rotate(15deg);
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+            animation: milesHang 4s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        @keyframes milesHang {
+            0%, 100% { transform: scaleX(-1) rotate(15deg) translateY(0); }
+            50% { transform: scaleX(-1) rotate(15deg) translateY(-15px); }
+        }
+        
+        .quote-text {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            color: var(--comic-white);
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            text-shadow: 
+                4px 4px 0 var(--miles-black),
+                8px 8px 0 rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+            transform: rotate(-1deg);
+            line-height: 1.3;
+        }
+        
+        .quote-author {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--comic-yellow);
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Social Section */
+        .social-section {
+            text-align: center;
+            position: relative;
+        }
+        
+        .social-cta {
+            font-size: 1.3rem;
+            color: var(--comic-gray);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        .social-handle {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 3rem;
+            background: var(--miles-red);
+            color: var(--comic-white);
+            text-decoration: none;
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            border: 4px solid var(--comic-white);
+            transform: rotate(-2deg);
+            transition: all 0.4s;
+            box-shadow: 
+                8px 8px 0 var(--comic-yellow),
+                0 0 40px rgba(226, 54, 54, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-handle:hover {
+            background: var(--comic-yellow);
+            color: var(--miles-black);
+            transform: rotate(2deg) scale(1.1);
+            box-shadow: 
+                12px 12px 0 var(--miles-red),
+                0 0 50px rgba(255, 215, 0, 0.6);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 4px solid var(--miles-red);
+            position: relative;
+            z-index: 10;
+            background: var(--miles-black);
+        }
+        
+        .footer-quote {
+            font-family: 'Bangers', cursive;
+            font-size: 1.6rem;
+            color: var(--comic-gray);
+            margin-bottom: 1rem;
+            transform: rotate(-1deg);
+            text-shadow: 2px 2px 0 var(--miles-red);
+        }
+        
+        .footer-credit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--miles-red);
+            font-weight: bold;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .profile-container {
+                width: 260px;
+                height: 260px;
+            }
+            
+            .miles-float {
+                display: none;
+            }
+            
+            .quote-miles {
+                width: 120px;
+                opacity: 0.6;
+            }
+            
+            .interests-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .comic-card, .game-card, .interest-item {
+                transform: none !important;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--miles-black);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--miles-red);
+            border: 3px solid var(--comic-yellow);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- DYNAMIC BACKGROUND -->
+    <div class="comic-bg"></div>
+    <div class="burst-rays"></div>
+    <div class="halftone"></div>
+    
+    <!-- FLOATING MILES IMAGES (TUMHARI UPLOADED PNGs) -->
+    <img src="images\Adobe Express - file (2).png" alt="Miles Crouching" class="miles-float miles-1">
+    <img src="images\Untitled.png" alt="Miles Jumping" class="miles-float miles-2">
+    
+    
+    <!-- MOVING SPIDERS -->
+    <div class="spider-container" id="spiderContainer"></div>
+    
+    <nav>
+        <div class="logo">ARCTURUS_</div>
+        <ul class="nav-links">
+            <li><a href="#origin">ORIGIN</a></li>
+            <li><a href="#interests">TRAITS</a></li>
+            <li><a href="#gaming">LOADOUT</a></li>
+            <li><a href="#connect">SIGNAL</a></li>
+        </ul>
+    </nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-label">// MIZORAM_UNIVERSITY // SPIDER-VERSE</span>
+            
+            <!-- TUMHARI COMIC STYLE PHOTO -->
+            <div class="profile-container">
+                <div class="profile-box">
+                    <img src="images\Arcturus11.png" alt="Vikramakshit Comic Style" class="profile-image">
+                </div>
+            </div>
+            
+            <h1 class="glitch" data-text="VIKRAMAKSHIT">VIKRAMAKSHIT</h1>
+            <div class="hero-handle">@be_arcturus</div>
+            <p class="hero-bio">
+                18 y/o Vibe Coder from Mizoram University. B.Tech ECE 1st Year. 
+                Building circuits by day, training neural nets by night. 
+                Always chasing the next adventure.
+            </p>
+            <div class="hero-meta">
+                <span class="meta-badge">⚡ ECE '28</span>
+                <span class="meta-badge">🎮 GAMER</span>
+                <span class="meta-badge">🤖 AI</span>
+                <span class="meta-badge">🎒 TRAVELER</span>
+            </div>
+            <a href="#origin" class="hero-cta">
+                ENTER_MY_VERSE →
+            </a>
+        </div>
+    </section>
+    
+    <section class="panel-section" id="origin">
+        <h2 class="section-title glitch" data-text="ORIGIN_STORY">ORIGIN_STORY</h2>
+        <div class="comic-grid">
+            <div class="comic-card">
+                <div class="card-header">
+                    <span class="card-icon">🎓</span>
+                    <span class="card-issue">ISSUE #001</span>
+                </div>
+                <h3 class="card-title">The University Bite</h3>
+                <p class="card-content">
+                    Got bit by the engineering bug at Mizoram University. 
+                    Freshman year ECE—learning to tame electrons while dreaming in code. 
+                    18 years old and already building my multiverse.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">B.Tech ECE</span>
+                    <span class="tech-tag">1st Year</span>
+                </div>
+            </div>
+            
+            <div class="comic-card">
+                <div class="card-header">
+                    <span class="card-icon">💻</span>
+                    <span class="card-issue">ISSUE #042</span>
+                </div>
+                <h3 class="card-title">Vibe Coder Mode</h3>
+                <p class="card-content">
+                    No rigid patterns, just pure flow. I code what feels right—
+                    AI experiments, electronic circuits, sci-fi inspired projects. 
+                    The vibe is the architecture.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Arduino</span>
+                    <span class="tech-tag">AI/ML</span>
+                </div>
+            </div>
+            
+            <div class="comic-card">
+                <div class="card-header">
+                    <span class="card-icon">🎒</span>
+                    <span class="card-issue">ISSUE #103</span>
+                </div>
+                <h3 class="card-title">The Wanderlust</h3>
+                <p class="card-content">
+                    Traveling is my debug mode. New places, new perspectives, 
+                    new inspiration. Every journey adds a new dimension to my code. 
+                    Currently exploring Mizoram's hidden trails.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Adventure</span>
+                    <span class="tech-tag">Photography</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="panel-section interests-section" id="interests">
+        <h2 class="section-title glitch" data-text="TRAITS_&_POWERS">TRAITS_&_POWERS</h2>
+        <div class="interests-grid">
+            <div class="interest-item">
+                <div class="interest-icon">🤖</div>
+                <div class="interest-label">AI/ML</div>
+            </div>
+            <div class="interest-item">
+                <div class="interest-icon">🔌</div>
+                <div class="interest-label">ELECTRONICS</div>
+            </div>
+            <div class="interest-item">
+                <div class="interest-icon">🚀</div>
+                <div class="interest-label">SCI-FI</div>
+            </div>
+            <div class="interest-item">
+                <div class="interest-icon">🎵</div>
+                <div class="interest-label">MUSIC</div>
+            </div>
+            <div class="interest-item">
+                <div class="interest-icon">🎒</div>
+                <div class="interest-label">TRAVEL</div>
+            </div>
+            <div class="interest-item">
+                <div class="interest-icon">⌨️</div>
+                <div class="interest-label">TECH</div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="panel-section gaming-section" id="gaming">
+        <h2 class="section-title glitch" data-text="GAMING_LOADOUT">GAMING_LOADOUT</h2>
+        <div class="gaming-grid">
+            <div class="game-card">
+                <div class="game-icon">⚔️</div>
+                <div class="game-name">CLASH OF CLANS</div>
+                <div class="game-id">#8J2V9L0P</div>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">🔥</div>
+                <div class="game-name">FREE FIRE</div>
+                <div class="game-id">Arcturus_FF</div>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">⭐</div>
+                <div class="game-name">BRAWL STARS</div>
+                <div class="game-id">#9Q8R7S6T</div>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">🎯</div>
+                <div class="game-name">COD MOBILE</div>
+                <div class="game-id">Arcturus_COD</div>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">🧱</div>
+                <div class="game-name">ROBLOX</div>
+                <div class="game-id">@arcturus_rbx</div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="quote-section">
+        <!-- MILES UPSIDE DOWN (TUMHARI UPLOADED IMAGE) -->
+        
+        <p class="quote-text">
+            "What makes you different is what makes you Spider-Man"
+        </p>
+        <p class="quote-author">— Miles Morales</p>
+    </section>
+    
+    <section class="panel-section social-section" id="connect">
+        <h2 class="section-title glitch" data-text="ESTABLISH_LINK">ESTABLISH_LINK</h2>
+        <p class="social-cta">Find me in the digital multiverse</p>
+        <a href="https://instagram.com/be_arcturus" target="_blank" class="social-handle">
+            📸 @be_arcturus
+        </a>
+        <p style="color: var(--comic-gray); font-size: 1rem; max-width: 500px; margin: 2rem auto 0;">
+            Slide into the DMs for collabs, gaming sessions, 
+            or just to talk about the latest sci-fi binge.
+        </p>
+    </section>
+    
+    <footer>
+        <p class="footer-quote">"Anyone can wear the mask"</p>
+        <p class="footer-credit">// Vikramakshit // Arcturus // Spider-Verse // 2026</p>
+    </footer>
+    
+    <script>
+        // GENERATE MOVING SPIDERS
+        const spiderContainer = document.getElementById('spiderContainer');
+        const spiderEmojis = ['🕷️', '🕸️', '🕷️', '🕸️', '🕷️'];
+        
+        for (let i = 0; i < 6; i++) {
+            const spider = document.createElement('div');
+            spider.className = 'spider';
+            spider.textContent = spiderEmojis[i % spiderEmojis.length];
+            spider.style.setProperty('--start-x', (Math.random() * window.innerWidth) + 'px');
+            spider.style.setProperty('--start-y', (Math.random() * window.innerHeight) + 'px');
+            spider.style.setProperty('--duration', (12 + Math.random() * 15) + 's');
+            spider.style.left = '0';
+            spider.style.top = '0';
+            spiderContainer.appendChild(spider);
+        }
+        
+        // RANDOM GLITCH TRIGGERS
+        setInterval(() => {
+            const glitches = document.querySelectorAll('.glitch');
+            const random = glitches[Math.floor(Math.random() * glitches.length)];
+            random.style.animation = 'none';
+            setTimeout(() => {
+                random.style.animation = '';
+            }, 100);
+        }, 3000);
+        
+        // ADD SPIDER ON CLICK
+        document.addEventListener('click', (e) => {
+            const spider = document.createElement('div');
+            spider.textContent = '🕷️';
+            spider.style.position = 'fixed';
+            spider.style.left = e.clientX + 'px';
+            spider.style.top = e.clientY + 'px';
+            spider.style.fontSize = '2rem';
+            spider.style.pointerEvents = 'none';
+            spider.style.zIndex = '9999';
+            spider.style.animation = 'spiderPop 1s ease-out forwards';
+            spider.style.textShadow = '0 0 10px #e23636';
+            spider.style.filter = 'drop-shadow(0 0 5px #e23636)';
+            document.body.appendChild(spider);
+            
+            setTimeout(() => spider.remove(), 1000);
+        });
+        
+        // SPIDER POP ANIMATION
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spiderPop {
+                0% { transform: scale(0) rotate(0deg); opacity: 1; }
+                50% { transform: scale(1.5) rotate(180deg); }
+                100% { transform: scale(0) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
